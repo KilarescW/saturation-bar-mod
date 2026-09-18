@@ -9,15 +9,15 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set up JDK 21
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           java-version: '21'
           distribution: 'temurin'
 
       - name: Build with Gradle
-          # We are skipping the 'setup-gradle' action entirely
-          # because its cache is what is crashing GitHub's servers.
-        run: gradle build
+        # --no-daemon prevents the server from getting confused by background processes
+        # -Dorg.gradle.jvmargs="-Xmx2G" gives the build more memory
+        run: gradle build --no-daemon -Dorg.gradle.jvmargs="-Xmx2G"
 
       - name: Upload Mod Jar
         uses: actions/upload-artifact@v4
